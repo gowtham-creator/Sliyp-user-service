@@ -6,16 +6,18 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+
+import java.util.Map;
+
 @Node
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-
-    @Id @GeneratedValue private Long ref;
-    private String name;
-    private String address;
-    private String email;
-    private String password;
-    private String handle;
+public class Post {
+    @Id
+    @GeneratedValue private Long id;
+    private String writeUp;
+    private Long likes;
+    private Map<String,String> comments;
+    private Long shares;
 }
