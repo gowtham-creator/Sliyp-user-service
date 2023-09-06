@@ -4,7 +4,11 @@ FROM adoptopenjdk/openjdk11:alpine-jre
 # Set the working directory inside the container
 WORKDIR /app
 
-RUN mvn clean install
+RUN ls -l /app
+
+RUN chmod +x ./mvnw
+
+RUN ./mvnw clean install
 
 # Copy the JAR file from your host into the container at /app
 COPY target/user-service-0.0.1-SNAPSHOT.jar .
