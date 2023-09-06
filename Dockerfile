@@ -1,18 +1,14 @@
-# Use a base image with Java (e.g., OpenJDK)
-FROM adoptopenjdk/openjdk11:alpine-jre
-
-# Set the working directory inside the container
+# Stage 1: Build the Java application using Maven image
+FROM maven:3.8.4-openjdk-11 AS build
 WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src src
+RUN mvn clean package -DskipTests
 
-
-
-RUN ./mvnw clean install
-
-# Copy the JAR file from your host into the container at /app
-COPY target/user-service-0.0.1-SNAPSHOT.jar .
-
-# Expose the port that your Spring Boot application listens on
-EXPOSE 8080
-
-# Define the command to run your application
+# Stage 2: Create a lightweight image for running the application
+FROM openjdk:11-jre-slim
+WORKDIR /app
+COPY --from=build /app/target/user-service-0.0.1-SNAPSHOT.jar .
 CMD ["java", "-jar", "user-service-0.0.1-SNAPSHOT.jar"]
+
