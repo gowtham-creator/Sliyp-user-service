@@ -4,6 +4,8 @@ FROM openjdk:11
 # Set the working directory inside the container
 WORKDIR /app
 
+RUN ./mvnw clean install
+
 # Copy the JAR file from your host into the container at /app
 COPY target/user-service-0.0.1-SNAPSHOT.jar .
 
