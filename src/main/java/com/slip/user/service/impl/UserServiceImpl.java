@@ -1,6 +1,5 @@
 package com.slip.user.service.impl;
 
-import com.slip.user.Models.Post;
 import com.slip.user.Models.User;
 import com.slip.user.repositories.UserRepository;
 import com.slip.user.service.UserService;
@@ -27,6 +26,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByHandle(String handle){
         return userRepository.getUserByHandle(handle);
+    }
+    @Override
+    public User getUserById(Long id){
+        return userRepository.findById(id).orElseThrow();
+    }
+    @Override
+    public User getUserByEmail(String email){
+        return userRepository.getUserByEmail(email);
     }
 
 }

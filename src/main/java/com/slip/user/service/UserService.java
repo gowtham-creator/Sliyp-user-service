@@ -12,4 +12,8 @@ public interface UserService {
     public User addUsers(User user);
 
     User getUserByHandle(String handle);
+
+    User getUserById(Long id);
+
+    User getUserByEmail(String email);
 }
