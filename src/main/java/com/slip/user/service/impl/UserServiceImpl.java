@@ -6,6 +6,7 @@ import com.slip.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public User addUsers(User user){
+        if(!Objects.isNull(userRepository.getUserByEmail(user.getEmail()))){
+        throw new RuntimeException("User already exists");
+        }
         return userRepository.save(user);
     }
     @Override
