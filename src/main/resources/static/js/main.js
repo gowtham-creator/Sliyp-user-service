@@ -47,7 +47,7 @@ function onConnected() {
 
 
 function onError(error) {
-    connectingElement.textContent = 'Não foi possível se conectar ao WebSocket! Atualize a página e tente novamente ou entre em contato com o administrador.';
+    connectingElement.textContent = 'Unable to connect to WebSocket! Refresh the page and try again, or contact the administrator.';
     connectingElement.style.color = 'red';
 }
 
