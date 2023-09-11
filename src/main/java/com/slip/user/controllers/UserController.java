@@ -4,6 +4,7 @@ import com.slip.user.Models.Tasks;
 import com.slip.user.Models.User;
 import com.slip.user.dto.LoginRequestDto;
 import com.slip.user.dto.LoginResponseDto;
+import com.slip.user.service.EmailService;
 import com.slip.user.service.TasksService;
 import com.slip.user.service.UserService;
 import io.jsonwebtoken.Jwts;
@@ -20,10 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Date;
@@ -39,12 +36,14 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final TasksService tasksService;
+    private final EmailService emailService;
 
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, TasksService tasksService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, TasksService tasksService, EmailService emailService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.tasksService = tasksService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/all")
@@ -84,6 +83,7 @@ public class UserController {
             // Generate a JWT token
             String jwtToken = generateJwtToken(user);
 
+            emailService.sendEmail(loginRequestDto.getEmail(),"SLiYp login","Hii "+user.getName()+",\n You are logged-in SLiYp successfully");
 
             // Return the JWT token in the response
             return ResponseEntity.ok(LoginResponseDto.builder()
