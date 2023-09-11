@@ -1,6 +1,7 @@
 package com.slip.user.controllers;
 
 import com.slip.user.Models.ChatMessage;
+import com.slip.user.Models.User;
 import com.slip.user.service.EmailService;
 import com.slip.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,12 +46,8 @@ public class ChatController {
 
         CompletableFuture.runAsync(
                 () -> {
-                    List<String> email=userService.getAllUsers().stream().map(user -> {
-                        emailService.
-                                sendEmail(user.getEmail(), chatMessage.getSender() + " has joined SLiYp chat ", "hii, " + user.getName() + ", \n " + chatMessage.getSender() + " has joined in the  SLYip chat want to join https://user-service-ib7aiys5la-el.a.run.app/");
-                        return user.getEmail();
-                    }).collect(Collectors.toList());
-                    System.out.println("email sent to "+email);
+                    String[] emailArray = userService.getAllUsers().stream().map(User::getEmail).toArray(String[]::new);
+                    emailService.sendEmails(emailArray, chatMessage.getSender() + " has joined SLiYp chat ", "hii , \n " + chatMessage.getSender() + " has joined in the SLYip chat want to join https://user-service-ib7aiys5la-el.a.run.app/");
                 },
                 executorService
         );
