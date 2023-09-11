@@ -4,6 +4,9 @@ package com.slip.user.Models;
 public class ChatMessage {
     private String content;
     private String sender;
+
+    private String senderEmail;
+
     private MessageType type;
 
     public enum MessageType {
@@ -24,6 +27,15 @@ public class ChatMessage {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+
+    public String getSenderEmail() {
+        return senderEmail;
+    }
+
+    public void setSenderEmail(String sender) {
+        this.sender = senderEmail;
     }
 
     public MessageType getType() {
