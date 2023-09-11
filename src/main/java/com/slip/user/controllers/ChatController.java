@@ -47,7 +47,7 @@ public class ChatController {
                 () -> {
                     List<String> email=userService.getAllUsers().stream().map(user -> {
                         emailService.
-                                sendEmail(user.getEmail(), chatMessage.getSender() + " has joined SLiYp chat ", "hii, " + user.getName() + ", \n " + chatMessage.getSender() + " has joined in the  SLYip chat");
+                                sendEmail(user.getEmail(), chatMessage.getSender() + " has joined SLiYp chat ", "hii, " + user.getName() + ", \n " + chatMessage.getSender() + " has joined in the  SLYip chat want to join https://user-service-ib7aiys5la-el.a.run.app/");
                         return user.getEmail();
                     }).collect(Collectors.toList());
                     System.out.println("email sent to "+email);
