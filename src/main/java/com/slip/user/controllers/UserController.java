@@ -13,9 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,6 +64,14 @@ public class UserController {
     @GetMapping("/tasks/{id}")
     public Tasks getTasksID(@PathVariable String id){
         return tasksService.findTaskByID(Long.valueOf(id));
+    }
+    @DeleteMapping("/tasks/{taskId}")
+    public String deleteTasksID(@PathVariable String taskId){
+        return tasksService.deleteTaskByID(Long.valueOf(taskId));
+    }
+    @PutMapping("/tasks")
+    public Tasks updateTasks(@PathVariable Tasks tasks){
+        return tasksService.updateTaskBy(tasks);
     }
     @PostMapping("/tasks")
     public ResponseEntity<Tasks> addTasksForUser(@RequestParam String UserId ,@RequestBody Tasks tasks){

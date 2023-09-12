@@ -20,6 +20,18 @@ public class TasksServiceImpl implements TasksService {
     public Tasks findTaskByID(Long id){
         return tasksRepostitory.findById(id).orElseThrow();
     }
+
+    @Override
+    public String deleteTaskByID(Long id){
+         tasksRepostitory.deleteById(id);
+         return "Task deleted successfully";
+    }
+    @Override
+    public Tasks updateTaskBy(Tasks tasks){
+        tasks.setUpdatedAt(Instant.now());
+        return tasksRepostitory.save(tasks);
+    };
+
     @Override
     public List<Tasks> findAllTasksByUserId(String userRef){
         return tasksRepostitory.getUserByUserId(userRef);
