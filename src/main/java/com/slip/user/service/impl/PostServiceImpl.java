@@ -16,8 +16,13 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
     }
     @Override
-    public Post savePost(Post post){
-        return postRepository.save(post);
+    public Post saveOrUpdatePost(Post post){
+        String userEmail="";
+        Post createdPost= postRepository.save(post);
+        if(Boolean.FALSE.equals(postRepository.isRelationExist(userEmail,createdPost.getId()))){
+            postRepository.createRelation(userEmail,createdPost.getId());
+        }
+        return createdPost;
     }
     @Override
     public Post getPost(Long id){

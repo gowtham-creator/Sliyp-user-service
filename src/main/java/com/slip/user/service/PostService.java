@@ -5,7 +5,7 @@ import com.slip.user.Models.Post;
 import java.util.List;
 
 public interface PostService{
-    Post savePost(Post post);
+    Post saveOrUpdatePost(Post post);
 
     Post getPost(Long id);
 
