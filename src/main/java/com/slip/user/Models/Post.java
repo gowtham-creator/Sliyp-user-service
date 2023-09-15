@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
+import java.util.List;
 import java.util.Map;
 
 @Node
@@ -16,8 +17,10 @@ import java.util.Map;
 public class Post {
     @Id
     @GeneratedValue private Long id;
+    private String userRef;
     private String writeUp;
+    private String imageUrl;
     private Long likes;
-    private Map<String,String> comments;
+    private List<String> comments;
     private Long shares;
 }
