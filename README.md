@@ -1,3 +1,5 @@
+service swagger url : https://user-service-ib7aiys5la-el.a.run.app/swagger-ui/index.html#/post-controller/createUserPost
+
 # INSTALL
 
 ```
