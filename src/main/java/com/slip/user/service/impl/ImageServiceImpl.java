@@ -43,7 +43,6 @@ public class ImageServiceImpl {
                 ObjectId storedFileId = uploadStream.getObjectId();
                 System.out.println("Image stored with ID: " + storedFileId);
 
-                // Close the MongoDB client
                 client.close();
             }catch (Exception ex){
                 System.out.println(ex.getMessage());
