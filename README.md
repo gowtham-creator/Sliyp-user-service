@@ -59,9 +59,20 @@ taskkill /pid <your_process_id> /f
 # useful git commands
 
 ````
+for checking the status
+git status
 
+for creating a branch
 git checkout -b bhuvaneswar_updated_readmefile
 
+adding all the files 
+git add .
+
+commiting the changes
+ git commit -m "readme file updated" 
+
+pushing the changes to remote repo
+git puch
 
 ````
 
