@@ -2,6 +2,7 @@ package com.slip.user.controllers;
 
 import com.slip.user.Models.Post;
 import com.slip.user.service.PostService;
+import com.slip.user.util.JwtTokenUtil;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,8 @@ public class PostController {
 
     @PostMapping
     public Post createUserPost(@RequestBody Post post, @RequestHeader("Authorization") String authorizationHeader){
-        return postService.saveOrUpdatePost(post);
+        final String userEmail= JwtTokenUtil.getEmailFromToken(authorizationHeader.substring(7));
+        return postService.saveOrUpdatePost(post,userEmail);
     }
     @GetMapping("/{id}")
     public Post getUserPost(@PathVariable Long  id){
@@ -37,10 +39,6 @@ public class PostController {
     @GetMapping()
     public List<Post> getUserPostsByPagination(@RequestParam Long offset ,@RequestParam Long limit){
         return postService.getAllPost();
-    }
-    @PutMapping
-    public Post updateUserPost(Post post){
-        return postService.saveOrUpdatePost(post);
     }
     @DeleteMapping
     public String deleteUserPost(@RequestParam Long  id){

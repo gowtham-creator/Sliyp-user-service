@@ -17,7 +17,7 @@ import java.util.Map;
 public class Post {
     @Id
     @GeneratedValue private Long id;
-    private String userRef;
+    private String postRef;
     private String writeUp;
     private String imageUrl;
     private Long likes;

@@ -7,6 +7,7 @@ import com.slip.user.dto.LoginResponseDto;
 import com.slip.user.service.EmailService;
 import com.slip.user.service.TasksService;
 import com.slip.user.service.UserService;
+import com.slip.user.util.JwtTokenUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.http.HttpStatus;
@@ -91,7 +92,7 @@ public class UserController {
         if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
             System.out.println(user.getUsername());
             // Generate a JWT token
-            String jwtToken = generateJwtToken(user);
+            String jwtToken = JwtTokenUtil.generateToken(user);
 
             emailService.sendEmail(loginRequestDto.getEmail(),"SLiYp login","Hii "+user.getName()+",\n You are logged-in SLiYp successfully");
 
@@ -107,28 +108,6 @@ public class UserController {
             // Invalid credentials
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-    }
-
-    private String generateJwtToken(User user) {
-        // Define the claims for the JWT token (you can add more if needed)
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", user.getRef());
-
-        // Set the token expiration time (e.g., 1 hour from now)
-        long tokenExpirationMillis = System.currentTimeMillis() + 3600 * 1000; // 1 hour
-
-        SecureRandom random = new SecureRandom();
-        byte[] keyBytes = new byte[64];
-        random.nextBytes(keyBytes);
-
-        // Encode the key in Base64
-        String secretKey = Base64.getEncoder().encodeToString(keyBytes);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(new Date(tokenExpirationMillis))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
     }
 }
 

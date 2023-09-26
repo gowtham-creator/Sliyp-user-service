@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -16,12 +17,13 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
     }
     @Override
-    public Post saveOrUpdatePost(Post post){
-        String userEmail="";
-        Post createdPost= postRepository.save(post);
-        if(Boolean.FALSE.equals(postRepository.isRelationExist(userEmail,createdPost.getId()))){
-            postRepository.createRelation(userEmail,createdPost.getId());
+    public Post saveOrUpdatePost(Post post,String userEmail){
+
+        if(post.getPostRef()==null ) {
+            post.setPostRef(UUID.randomUUID().toString());
         }
+        Post createdPost = postRepository.save(post);
+        postRepository.createRelation(userEmail,createdPost.getPostRef());
         return createdPost;
     }
     @Override
