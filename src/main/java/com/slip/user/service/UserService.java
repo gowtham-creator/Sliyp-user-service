@@ -16,4 +16,12 @@ public interface UserService {
     User getUserById(Long id);
 
     User getUserByEmail(String email);
+
+    String followByEmailId(String loggedInUserEmail, String targetUserEmail);
+
+    String unFollowByEmailId(String loggedInUserEmail, String targetUserEmail);
+
+    List<User> getFollowingsOfUserWithEmailId(String targetUserEmail);
+
+    List<User> getFollowersOfUserWithEmailId(String targetUserEmail);
 }

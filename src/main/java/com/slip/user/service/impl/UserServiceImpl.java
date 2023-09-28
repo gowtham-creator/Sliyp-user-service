@@ -45,4 +45,27 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByEmail(email);
     }
 
+    @Override
+    public String followByEmailId(String loggedInUserEmail, String targetUserEmail){
+        String response= userRepository.followUserWitEmail(loggedInUserEmail,targetUserEmail);
+        emailService.sendEmail(targetUserEmail,"hii, some one started following you on SLiYp", "You are being followed by user with email "+loggedInUserEmail+" ::{<->}:: "+response);
+        return response;
+    }
+    @Override
+    public String unFollowByEmailId(String loggedInUserEmail, String targetUserEmail){
+          String response= userRepository.unFollowUserWitEmail(loggedInUserEmail,targetUserEmail);
+          emailService.sendEmail(targetUserEmail,"hii, some one started unfollowing you on SLiYp", "You are being unfollowed by user with email "+loggedInUserEmail+" ::{<->}:: "+response);
+        return response;
+    }
+
+    @Override
+    public List<User> getFollowingsOfUserWithEmailId(String targetUserEmail) {
+        return userRepository.getFollowings(targetUserEmail) ;
+    }
+
+    @Override
+    public List<User> getFollowersOfUserWithEmailId(String targetUserEmail) {
+        return userRepository.getFollowers(targetUserEmail);
+    }
+
 }

@@ -13,16 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -58,27 +49,8 @@ public class UserController {
     public ResponseEntity<User> getLoggedInUser(){
         return ResponseEntity.ok(userService.getUserById(Long.valueOf("22")));
     }
-    @GetMapping("/tasks")
-    public Map<String,List<Tasks>> getTasksByUserID(@RequestParam String UserId){
-        return Map.of("tasks",tasksService.findAllTasksByUserId(UserId));
-    }
-    @GetMapping("/tasks/{id}")
-    public Tasks getTasksID(@PathVariable String id){
-        return tasksService.findTaskByID(Long.valueOf(id));
-    }
-    @DeleteMapping("/tasks/{taskId}")
-    public String deleteTasksID(@PathVariable String taskId){
-        return tasksService.deleteTaskByID(Long.valueOf(taskId));
-    }
-    @PutMapping("/tasks")
-    public Tasks updateTasks(@PathVariable Tasks tasks){
-        return tasksService.updateTaskBy(tasks);
-    }
-    @PostMapping("/tasks")
-    public ResponseEntity<Tasks> addTasksForUser(@RequestParam String UserId ,@RequestBody Tasks tasks){
-        tasks.setUserRef(UserId);
-        return ResponseEntity.ok(tasksService.save(tasks));
-    }
+
+
     @PostMapping("/register")
     public ResponseEntity<User> addUsers(@RequestBody User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -108,6 +80,30 @@ public class UserController {
             // Invalid credentials
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
+    }
+
+
+
+    @GetMapping("/tasks")
+    public Map<String,List<Tasks>> getTasksByUserID(@RequestParam String UserId){
+        return Map.of("tasks",tasksService.findAllTasksByUserId(UserId));
+    }
+    @GetMapping("/tasks/{id}")
+    public Tasks getTasksID(@PathVariable String id){
+        return tasksService.findTaskByID(Long.valueOf(id));
+    }
+    @DeleteMapping("/tasks/{taskId}")
+    public String deleteTasksID(@PathVariable String taskId){
+        return tasksService.deleteTaskByID(Long.valueOf(taskId));
+    }
+    @PutMapping("/tasks")
+    public Tasks updateTasks(@PathVariable Tasks tasks){
+        return tasksService.updateTaskBy(tasks);
+    }
+    @PostMapping("/tasks")
+    public ResponseEntity<Tasks> addTasksForUser(@RequestParam String UserId ,@RequestBody Tasks tasks){
+        tasks.setUserRef(UserId);
+        return ResponseEntity.ok(tasksService.save(tasks));
     }
 }
 
