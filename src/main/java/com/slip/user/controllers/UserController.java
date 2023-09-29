@@ -29,14 +29,12 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final TasksService tasksService;
     private final EmailService emailService;
 
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, TasksService tasksService, EmailService emailService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-        this.tasksService = tasksService;
         this.emailService = emailService;
     }
 
@@ -80,30 +78,6 @@ public class UserController {
             // Invalid credentials
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-    }
-
-
-
-    @GetMapping("/tasks")
-    public Map<String,List<Tasks>> getTasksByUserID(@RequestParam String UserId){
-        return Map.of("tasks",tasksService.findAllTasksByUserId(UserId));
-    }
-    @GetMapping("/tasks/{id}")
-    public Tasks getTasksID(@PathVariable String id){
-        return tasksService.findTaskByID(Long.valueOf(id));
-    }
-    @DeleteMapping("/tasks/{taskId}")
-    public String deleteTasksID(@PathVariable String taskId){
-        return tasksService.deleteTaskByID(Long.valueOf(taskId));
-    }
-    @PutMapping("/tasks")
-    public Tasks updateTasks(@PathVariable Tasks tasks){
-        return tasksService.updateTaskBy(tasks);
-    }
-    @PostMapping("/tasks")
-    public ResponseEntity<Tasks> addTasksForUser(@RequestParam String UserId ,@RequestBody Tasks tasks){
-        tasks.setUserRef(UserId);
-        return ResponseEntity.ok(tasksService.save(tasks));
     }
 }
 
