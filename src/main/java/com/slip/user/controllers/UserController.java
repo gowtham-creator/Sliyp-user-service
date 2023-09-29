@@ -10,11 +10,14 @@ import com.slip.user.service.UserService;
 import com.slip.user.util.JwtTokenUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.slip.user.util.AppUtils;
+
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -60,12 +63,8 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
         User user = userService.getUserByEmail(loginRequestDto.getEmail());
 
-        if(!"Verified".equals(user.getOtp()) && !StringUtils.isEmpty(user.getOtp())){
-           if(user.getOtp().equals(loginRequestDto.getOtp())){
-               user.setOtp("Verified");
-               userService.saveUserInfo(user);
-           }else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Otp : Otp should be verified");
-        }
+        if (verifyOtp(loginRequestDto, user))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Otp : Otp should be verified");
 
         // Check if the user exists and if the password matches
         if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
@@ -97,6 +96,16 @@ public class UserController {
       userService.saveUserInfo(user);
       emailService.sendEmail(email,"SLYip Otp verification","your otp is "+otp+ "plz verify to SLYip");
       return "Otp sent to email";
+    }
+
+    public  boolean verifyOtp(LoginRequestDto loginRequestDto, User user) {
+        if(!"Verified".equals(user.getOtp()) && !StringUtils.isEmpty(user.getOtp())){
+            if(user.getOtp().equals(loginRequestDto.getOtp())){
+                user.setOtp("Verified");
+                userService.saveUserInfo(user);
+            }else return true;
+        }
+        return false;
     }
 
     public static String generateOTP()
