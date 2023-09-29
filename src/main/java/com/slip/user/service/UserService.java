@@ -17,6 +17,8 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
+    User saveUserInfo(User user);
+
     String followByEmailId(String loggedInUserEmail, String targetUserEmail);
 
     String unFollowByEmailId(String loggedInUserEmail, String targetUserEmail);

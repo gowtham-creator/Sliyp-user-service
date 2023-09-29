@@ -44,6 +44,10 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email){
         return userRepository.getUserByEmail(email);
     }
+    @Override
+    public User saveUserInfo(User user){
+        return userRepository.save(user);
+    }
 
     @Override
     public String followByEmailId(String loggedInUserEmail, String targetUserEmail){

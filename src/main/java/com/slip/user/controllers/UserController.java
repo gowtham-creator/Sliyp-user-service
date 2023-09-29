@@ -10,6 +10,7 @@ import com.slip.user.service.UserService;
 import com.slip.user.util.JwtTokenUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,12 +52,20 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> addUsers(@RequestBody User user){
+        sendOtp(user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return ResponseEntity.ok(userService.addUsers(user));
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
         User user = userService.getUserByEmail(loginRequestDto.getEmail());
+
+        if(!"Verified".equals(user.getOtp()) && !StringUtils.isEmpty(user.getOtp())){
+           if(user.getOtp().equals(loginRequestDto.getOtp())){
+               user.setOtp("Verified");
+               userService.saveUserInfo(user);
+           }else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Otp : Otp should be verified");
+        }
 
         // Check if the user exists and if the password matches
         if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
@@ -78,6 +87,22 @@ public class UserController {
             // Invalid credentials
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
+    }
+
+    @PostMapping("/send-otp")
+    public String sendOtp(@RequestParam String email){
+      User user = userService.getUserByEmail(email);
+      String otp = generateOTP();
+      user.setOtp(otp);
+      userService.saveUserInfo(user);
+      emailService.sendEmail(email,"SLYip Otp verification","your otp is "+otp+ "plz verify to SLYip");
+      return "Otp sent to email";
+    }
+
+    public static String generateOTP()
+    {
+        int randomPin   =(int) (Math.random()*9000)+1000;
+        return String.valueOf(randomPin);
     }
 }
 
