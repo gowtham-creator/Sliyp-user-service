@@ -27,8 +27,10 @@ public class TasksServiceImpl implements TasksService {
          return "Task deleted successfully";
     }
     @Override
-    public Tasks updateTaskBy(Tasks tasks){
+    public Tasks updateTaskById(Long tasksId, Tasks tasksUpdated){
+        Tasks tasks=this.findTaskByID(tasksId);
         tasks.setUpdatedAt(Instant.now());
+        tasks.setDescription(tasksUpdated.getDescription());
         return tasksRepostitory.save(tasks);
     };
 

@@ -30,9 +30,9 @@ public class TasksController {
     public String deleteTasksID(@PathVariable String taskId){
         return tasksService.deleteTaskByID(Long.valueOf(taskId));
     }
-    @PutMapping()
-    public Tasks updateTasks(@PathVariable Tasks tasks){
-        return tasksService.updateTaskBy(tasks);
+    @PutMapping("/{id}")
+    public Tasks updateTasks(@PathVariable Long  id, @RequestBody Tasks tasks){
+        return tasksService.updateTaskById(id,tasks);
     }
     @PostMapping()
     public ResponseEntity<Tasks> addTasksForUser(@RequestParam String UserId , @RequestBody Tasks tasks){

@@ -11,9 +11,9 @@ public interface TasksService {
 
     String deleteTaskByID(Long id);
 
+    Tasks updateTaskById(Long tasksId, Tasks tasks);
+
     List<Tasks> findAllTasksByUserId(String userRef);
 
     Tasks save(Tasks tasks);
-
-    Tasks updateTaskBy(Tasks tasks);
 }
