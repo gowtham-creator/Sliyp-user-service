@@ -26,8 +26,8 @@ public class ImageController {
 
     @PostMapping()
        public Image uploadUserImage( @RequestParam("file")  MultipartFile image,
-                                     @RequestParam("img-type") ImageType imageType,
-                                     @RequestParam("post-ref") String postRef) throws IOException {
+                                     @RequestParam(value = "img-type",required = false) ImageType imageType,
+                                     @RequestParam(value = "post-ref",required = false) String postRef) throws IOException {
              return imageService.uploadImage(Image.builder()
                                 .filename(image.getOriginalFilename())
                                 .imageType(imageType)
