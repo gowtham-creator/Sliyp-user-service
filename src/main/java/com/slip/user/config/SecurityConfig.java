@@ -81,7 +81,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v3/api-docs/swagger-config",
                         "/v3/api-docs",
                         "/api/v1/password",
-                        "/api/v1/user/send-otp"
+                        "/api/v1/user/send-otp",
+                        "**websocket**"
                 )
                 .permitAll()
                 .anyRequest()
