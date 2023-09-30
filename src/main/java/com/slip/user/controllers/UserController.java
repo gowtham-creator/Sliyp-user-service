@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -57,6 +58,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
         User user = userService.getUserByEmail(loginRequestDto.getEmail());
+
+        if(Objects.isNull(user)) return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No user found with email "+ loginRequestDto.getEmail());
 
         if (verifyOtp(loginRequestDto, user))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Otp : Otp should be verified");
