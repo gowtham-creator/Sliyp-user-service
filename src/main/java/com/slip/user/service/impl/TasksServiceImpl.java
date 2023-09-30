@@ -42,6 +42,7 @@ public class TasksServiceImpl implements TasksService {
     public Tasks save(Tasks tasks){
         tasks.setCreatedAt(Instant.now());
         tasks.setUpdatedAt(Instant.now());
+        if(tasksRepostitory.getUserTaskCount(tasks.getUserRef())>5) throw new RuntimeException("User can't create more than 5 tasks");
         return tasksRepostitory.save(tasks);
     }
 }

@@ -15,4 +15,6 @@ public interface TasksRepostitory extends Neo4jRepository<Tasks,Long> {
 
     @Query("match (n:Tasks) where n.userRef =~ $userRef return n")
     List<Tasks> getUserByUserId(@Param("userRef") String userRef);
+    @Query("match (n:Tasks) where n.userRef =~ $userRef return count(n)")
+    Integer getUserTaskCount(@Param("userRef") String userRef);
 }
