@@ -2,6 +2,7 @@ package com.slip.user.controllers;
 
 import com.slip.user.Models.User;
 import com.slip.user.service.UserService;
+import com.slip.user.util.AppUtils;
 import com.slip.user.util.JwtTokenUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,13 @@ public class ConnectionController {
     }
 
     @PostMapping("/follow")
-    public ResponseEntity<String> followUser(@RequestParam String targetUserEmail, @RequestHeader("Authorization") String authorizationHeader){
-        final String loggedInUserEmail= JwtTokenUtil.getEmailFromToken(authorizationHeader.substring(7));
+    public ResponseEntity<String> followUser(@RequestParam String targetUserEmail){
+        final String loggedInUserEmail= AppUtils.getUserEmail();
         return ResponseEntity.ok(userService.followByEmailId(loggedInUserEmail,targetUserEmail));
     }
     @PostMapping("/unfollow")
-    public ResponseEntity<String> unfollowUser(@RequestParam String targetUserEmail,  @RequestHeader("Authorization") String authorizationHeader){
-        final String loggedInUserEmail= JwtTokenUtil.getEmailFromToken(authorizationHeader.substring(7));
+    public ResponseEntity<String> unfollowUser(@RequestParam String targetUserEmail){
+        final String loggedInUserEmail= AppUtils.getUserEmail();
         return ResponseEntity.ok(userService.unFollowByEmailId(loggedInUserEmail,targetUserEmail));
     }
 }

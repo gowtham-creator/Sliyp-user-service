@@ -1,30 +1,23 @@
 package com.slip.user.controllers;
 
-import com.slip.user.Models.Tasks;
 import com.slip.user.Models.User;
 import com.slip.user.dto.LoginRequestDto;
 import com.slip.user.dto.LoginResponseDto;
 import com.slip.user.service.EmailService;
-import com.slip.user.service.TasksService;
 import com.slip.user.service.UserService;
 import com.slip.user.util.JwtTokenUtil;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.slip.user.util.AppUtils;
 
 
-import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -32,12 +25,14 @@ import java.util.Map;
 @RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
     }
@@ -66,26 +61,45 @@ public class UserController {
         if (verifyOtp(loginRequestDto, user))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Otp : Otp should be verified");
 
-        // Check if the user exists and if the password matches
-        if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
-            System.out.println(user.getUsername());
-            // Generate a JWT token
+
+//        if (passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
+//            System.out.println(user.getUsername());
+//
+//            String jwtToken = JwtTokenUtil.generateToken(user);
+//
+//            emailService.sendEmail(loginRequestDto.getEmail(),"SLiYp login","Hii "+user.getName()+",\n You are logged-in SLiYp successfully");
+//
+//
+//            return ResponseEntity.ok(LoginResponseDto.builder()
+//                            .token(jwtToken)
+//                            .user(user.getRef().toString())
+//                            .username(user.getName())
+//                            .status(true)
+//                            .msg("Login successful..")
+//                    .build());
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+//        }
+        try {
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    user.getEmail(),
+                                    loginRequestDto.getPassword(),
+                                    user.getAuthorities()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             String jwtToken = JwtTokenUtil.generateToken(user);
-
-            emailService.sendEmail(loginRequestDto.getEmail(),"SLiYp login","Hii "+user.getName()+",\n You are logged-in SLiYp successfully");
-
-            // Return the JWT token in the response
+            emailService.sendEmail(loginRequestDto.getEmail(), "SLiYp login", "Hii " + user.getName() + ",\n You are logged-in SLiYp successfully");
             return ResponseEntity.ok(LoginResponseDto.builder()
-                            .token(jwtToken)
-                            .user(user.getRef().toString())
-                            .username(user.getName())
-                            .status(true)
-                            .msg("Login successful..")
+                    .token(jwtToken)
+                    .user(user.getRef().toString())
+                    .username(user.getName())
+                    .status(true)
+                    .msg("Login successful..")
                     .build());
-        } else {
-            // Invalid credentials
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        }
+        }catch (Exception e){ return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");}
     }
 
     @PostMapping("/send-otp")

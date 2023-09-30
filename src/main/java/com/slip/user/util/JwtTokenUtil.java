@@ -1,14 +1,16 @@
 package com.slip.user.util;
 
 import com.slip.user.Models.User;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.data.neo4j.core.ReactiveNeo4jClient.log;
+
 @UtilityClass
 public class JwtTokenUtil {
 
@@ -31,9 +33,24 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public static boolean validateToken(String token,User user) {
-        final String username = getEmailFromToken(token);
-        return username.equals(user.getEmail()) && !isTokenExpired(token);
+    public static boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token);
+            return true;
+        } catch (SignatureException ex) {
+            log.error("Invalid JWT signature");
+        } catch (MalformedJwtException ex) {
+            log.error("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            log.error("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            log.error("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            log.error("JWT claims string is empty.");
+        }
+        return false;
     }
 
     public static String getEmailFromToken(String token) {
