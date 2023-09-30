@@ -95,6 +95,7 @@ public class UserController {
             return ResponseEntity.ok(LoginResponseDto.builder()
                     .token(jwtToken)
                     .user(user.getRef().toString())
+                    .email(user.getEmail())
                     .username(user.getName())
                     .status(true)
                     .msg("Login successful..")
