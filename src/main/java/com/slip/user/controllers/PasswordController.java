@@ -26,7 +26,7 @@ public class PasswordController {
         this.emailService = emailService;
     }
 
-    @PostMapping("/forget-password")
+    @PostMapping("/forget")
     public String UpdatePassword(@RequestBody LoginRequestDto loginRequestDto){
         User user = userService.getUserByEmail(loginRequestDto.getEmail());
 
@@ -39,7 +39,7 @@ public class PasswordController {
         return  "password updated";
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/reset")
     public String  changePassword(@RequestBody LoginRequestDto loginRequestDto){
         User user = userService.getUserByEmail(loginRequestDto.getEmail());
 
