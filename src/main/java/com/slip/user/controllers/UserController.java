@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/profilee")
+    @GetMapping("/profilee/{email}")
     public ResponseEntity<User> getLoggedInUser(@PathVariable String email){
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }

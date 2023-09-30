@@ -1,7 +1,10 @@
 package com.slip.user.controllers;
 
 import com.slip.user.Models.Tasks;
+import com.slip.user.Models.User;
 import com.slip.user.service.TasksService;
+import com.slip.user.service.UserService;
+import com.slip.user.util.AppUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +17,20 @@ import java.util.Map;
 public class TasksController {
     private final TasksService tasksService;
 
-    public TasksController(TasksService tasksService) {
+    private final UserService userService;
+
+
+
+    public TasksController(TasksService tasksService, UserService userService) {
         this.tasksService = tasksService;
+        this.userService = userService;
     }
 
     @GetMapping()
-    public Map<String, List<Tasks>> getTasksByUserID(@RequestParam String UserId){
-        return Map.of("tasks",tasksService.findAllTasksByUserId(UserId));
+    public Map<String, List<Tasks>> getTasksByUserID(){
+        final String userEmail= AppUtils.getUserEmail();
+        User user = userService.getUserByEmail(userEmail);
+        return Map.of("tasks",tasksService.findAllTasksByUserId(user.getRef().toString()));
     }
     @GetMapping("/{id}")
     public Tasks getTasksID(@PathVariable String id){
@@ -35,8 +45,10 @@ public class TasksController {
         return tasksService.updateTaskById(id,tasks);
     }
     @PostMapping()
-    public ResponseEntity<Tasks> addTasksForUser(@RequestParam String UserId , @RequestBody Tasks tasks){
-        tasks.setUserRef(UserId);
+    public ResponseEntity<Tasks> addTasksForUser( @RequestBody Tasks tasks){
+        final String userEmail= AppUtils.getUserEmail();
+        User user = userService.getUserByEmail(userEmail);
+        tasks.setUserRef(user.getRef().toString());
         return ResponseEntity.ok(tasksService.save(tasks));
     }
 }
