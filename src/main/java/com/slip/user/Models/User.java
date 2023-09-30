@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private String password;
     private String handle;
     private String otp;
+    private String profileImgId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -15,10 +15,12 @@ import java.io.IOException;
 
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 @SpringBootApplication
 @EnableNeo4jRepositories
+@EnableMongoRepositories
 public class UserServiceApplication {
 
 	public static void main(String[] args) throws IOException {

@@ -23,4 +23,5 @@ public class Post {
     private Long likes;
     private List<String> comments;
     private Long shares;
+    private List<String> postImgIds;
 }
