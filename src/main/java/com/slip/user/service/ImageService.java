@@ -10,4 +10,6 @@ public abstract class ImageService {
     public abstract Image downloadImage(String imageRef);
 
     public abstract List<Image> findAllObj();
+
+    public abstract String deleteImage(String imageRef);
 }

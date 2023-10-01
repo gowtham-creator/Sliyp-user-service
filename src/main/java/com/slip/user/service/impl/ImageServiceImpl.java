@@ -53,4 +53,10 @@ public class ImageServiceImpl extends ImageService {
     public List<Image> findAllObj(){
         return imageRepository.findAll();
     }
+
+    @Override
+    public String deleteImage(String imageRef){
+         imageRepository.deleteById(imageRef);
+         return "img delete success";
+    }
 }
