@@ -37,8 +37,8 @@ public class ImageController {
                      .build());
        }
 
-    @GetMapping()
-    public ResponseEntity<byte[]> downloadUserImage(@RequestParam String imageRefId){
+    @GetMapping("/{imageRefId}")
+    public ResponseEntity<byte[]> downloadUserImage(@PathVariable String imageRefId){
         final Image image =imageService.downloadImage(imageRefId);
 
         return ResponseEntity.ok()
