@@ -5,6 +5,7 @@ import com.slip.user.dto.LoginRequestDto;
 import com.slip.user.dto.LoginResponseDto;
 import com.slip.user.service.EmailService;
 import com.slip.user.service.UserService;
+import com.slip.user.util.AppUtils;
 import com.slip.user.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -43,9 +44,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/profilee/{email}")
-    public ResponseEntity<User> getLoggedInUser(@PathVariable String email){
-        return ResponseEntity.ok(userService.getUserByEmail(email));
+    @GetMapping("/profile")
+    public ResponseEntity<User> getLoggedInUser(){
+        final  String loggedInUserEmail=AppUtils.getUserEmail();
+        return ResponseEntity.ok(userService.getUserByEmail(loggedInUserEmail));
     }
 
 
