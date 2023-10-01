@@ -82,7 +82,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v3/api-docs",
                         "/api/v1/password",
                         "/api/v1/user/send-otp",
-                        "**websocket**"
+                        "**websocket**",
+                        "/websocket/info",
+                        "**/websocket/**",
+                        "/websocket/**"
                 )
                 .permitAll()
                 .anyRequest()
