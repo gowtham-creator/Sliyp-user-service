@@ -10,6 +10,7 @@ import com.slip.user.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,10 @@ public class UserController {
     public ResponseEntity<User> getLoggedInUser(){
         final  String loggedInUserEmail=AppUtils.getUserEmail();
         return ResponseEntity.ok(userService.getUserByEmail(loggedInUserEmail));
+    }
+    @GetMapping("/find-profile/{email}")
+    public ResponseEntity<User> getTargetUserProfile(@PathVariable String email){
+        return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
 
