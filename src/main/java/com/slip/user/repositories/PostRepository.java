@@ -18,4 +18,38 @@ public interface PostRepository extends Neo4jRepository<Post,Long> {
 
     @Query("MATCH (user:User {email:  $email})-[hasPosted:HAS_POSTED]->(post:Post {postRef:  $postRef}) return hasPosted is not null")
     Boolean isRelationExist(@Param("email") String email  ,@Param("postRef") String  postRef);
+
+    @Query("Match (user:User {email: $email}) " +
+            "MATCH (post:Post {postRef: $postRef}) " +
+            "CREATE (user)-[hasLiked:HAS_LIKED{createdAt:date()}]->(post)" +
+            "SET post.likes = post.likes+1" +
+            " return type(hasLiked) ")
+    String createLikeRelation(@Param("postRef")String postRef, @Param("email") String userEmail);
+
+    @Query("MATCH (user:User {email: $email}) " +
+            "MATCH (post:Post {postRef:  $postRef}) " +
+            "Match (user)-[hasLiked:HAS_LIKED]->(post)  " +
+            "Delete  hasLiked")
+    String DeleteLikeRelation(@Param("postRef")String postRef, @Param("email") String userEmail);
+
+    @Query("Match (user:User {email: $email}) " +
+            "MATCH (post:Post {postRef: $postRef}) " +
+            "CREATE (user)-[hasShared:HAS_SHARED{createdAt:date()}]->(post) " +
+            "SET post.shares = post.shares+1" +
+            "return type(hasShared) ")
+    String createShareRelation(@Param("postRef")String postRef, @Param("email") String userEmail);
+
+    @Query("Match (user:User {email: $email}) " +
+            "MATCH (post:Post {postRef: $postRef}) " +
+            "CREATE (user)-[hasCommented:HAS_COMMENTED{createdAt:date(),comment:$commentText}]->(post) " +
+            "SET post.comments =post.comments+ [$email+ ':' +$commentText] " +
+            " return type(hasCommented) ")
+    String createCommentRelation(@Param("postRef")String postRef, @Param("email") String userEmail, @Param("commentText")String commentText);
+
+
+    @Query("Match (user:User {email: $email}) " +
+            "MATCH (post:Post {postRef: $postRef}) " +
+            "MATCH (user)-[hasCommented:HAS_COMMENTED]->(post)" +
+            " DELETE hasCommented ")
+    String DeleteCommentRelation(@Param("postRef")String postRef, @Param("email") String userEmail);
 }
