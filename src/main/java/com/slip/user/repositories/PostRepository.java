@@ -35,14 +35,14 @@ public interface PostRepository extends Neo4jRepository<Post,Long> {
     @Query("Match (user:User {email: $email}) " +
             "MATCH (post:Post {postRef: $postRef}) " +
             "CREATE (user)-[hasShared:HAS_SHARED{createdAt:date()}]->(post) " +
-            "SET post.shares = post.shares+1" +
+            "SET post.shares = post.shares+1 " +
             "return type(hasShared) ")
     String createShareRelation(@Param("postRef")String postRef, @Param("email") String userEmail);
 
     @Query("Match (user:User {email: $email}) " +
             "MATCH (post:Post {postRef: $postRef}) " +
-            "CREATE (user)-[hasCommented:HAS_COMMENTED{createdAt:date(),comment:$commentText}]->(post) " +
-            "SET post.comments =post.comments+ [$email+ ':' +$commentText] " +
+            "CREATE (user)-[ hasCommented: HAS_COMMENTED { createdAt:date() , comment:$commentText }]->(post) " +
+            "SET post.comments =post.comments+ [$commentText] " +
             " return type(hasCommented) ")
     String createCommentRelation(@Param("postRef")String postRef, @Param("email") String userEmail, @Param("commentText")String commentText);
 

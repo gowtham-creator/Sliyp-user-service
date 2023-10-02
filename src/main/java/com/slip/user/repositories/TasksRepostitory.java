@@ -17,4 +17,17 @@ public interface TasksRepostitory extends Neo4jRepository<Tasks,Long> {
     List<Tasks> getUserByUserId(@Param("userRef") String userRef);
     @Query("match (n:Tasks) where n.userRef =~ $userRef return count(n)")
     Integer getUserTaskCount(@Param("userRef") String userRef);
+
+    @Query("MATCH (user:User {email: $email}) " +
+            "MATCH (task:Tasks{ref:  $ref}) " +
+            "CREATE (user)-[hasPlanned:HAS_PLANNED{createdAt:date()}]->(task)  " +
+            "RETURN  type(hasPlanned)")
+    String createPlannedRelation(@Param("ref") String ref, @Param("email") String email);
+
+
+    @Query("MATCH (user:User {email: $email}) " +
+            "MATCH (task:Tasks{ref:  $ref}) " +
+            "MATCH (user)-[hasPlanned:HAS_PLANNED{createdAt:date()}]->(task)  " +
+            "DELETE  hasPlanned ")
+    String DeletePlannedRelation(@Param("ref") String ref, @Param("email") String email);
 }

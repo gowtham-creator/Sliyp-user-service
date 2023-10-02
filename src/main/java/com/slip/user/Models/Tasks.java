@@ -17,6 +17,7 @@ public class Tasks {
     @Id
     @GeneratedValue
     private Long id;
+    private String ref;
     private String description;
     private String userRef;
     private Instant createdAt;

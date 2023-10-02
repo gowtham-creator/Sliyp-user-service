@@ -46,9 +46,6 @@ public class TasksController {
     }
     @PostMapping()
     public ResponseEntity<Tasks> addTasksForUser( @RequestBody Tasks tasks){
-        final String userEmail= AppUtils.getUserEmail();
-        User user = userService.getUserByEmail(userEmail);
-        tasks.setUserRef(user.getRef().toString());
         return ResponseEntity.ok(tasksService.save(tasks));
     }
 }
