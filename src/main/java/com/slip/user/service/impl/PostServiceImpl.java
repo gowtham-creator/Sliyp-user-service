@@ -1,5 +1,6 @@
 package com.slip.user.service.impl;
 
+
 import com.slip.user.Models.Post;
 import com.slip.user.dto.Post.PostAction;
 import com.slip.user.repositories.PostRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -38,8 +40,9 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(id).orElseThrow();
     }
     @Override
-    public Page<Post> getAllPost(int offset , int limit){
-        return postRepository.findAll( PageRequest.of(offset,limit));
+    public List<Map<String, Object>> getAllPost(int offset , int limit){
+       // return postRepository.findAll( PageRequest.of(offset,limit));
+        return  postRepository.getPosts(offset,limit);
     }
     @Override
     public String deletePost(Long id){

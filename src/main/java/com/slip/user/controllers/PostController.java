@@ -1,5 +1,6 @@
 package com.slip.user.controllers;
 
+import com.mongodb.internal.connection.QueryResult;
 import com.slip.user.Models.Post;
 import com.slip.user.dto.Post.PostAction;
 import com.slip.user.service.PostService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -46,7 +48,7 @@ public class PostController {
         return postService.getPost(id);
     }
     @GetMapping()
-    public Page<Post> getUserPostsByPagination(@RequestParam int page , @RequestParam int size){
+    public List<Map<String, Object>> getUserPostsByPagination(@RequestParam int page , @RequestParam int size){
         return postService.getAllPost(page,size);
     }
     @DeleteMapping
