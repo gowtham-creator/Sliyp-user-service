@@ -7,6 +7,8 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ public class Post {
     @Id
     @GeneratedValue private Long id;
     private String postRef;
+    @NotEmpty @NotBlank
     private String writeUp;
     private String imageUrl;
     private Long likes;
