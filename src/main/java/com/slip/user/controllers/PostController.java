@@ -5,6 +5,7 @@ import com.slip.user.dto.Post.PostAction;
 import com.slip.user.service.PostService;
 import com.slip.user.service.UserService;
 import com.slip.user.util.AppUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +46,8 @@ public class PostController {
         return postService.getPost(id);
     }
     @GetMapping()
-    public List<Post> getUserPostsByPagination(@RequestParam Long offset ,@RequestParam Long limit){
-        return postService.getAllPost();
+    public Page<Post> getUserPostsByPagination(@RequestParam int page , @RequestParam int size){
+        return postService.getAllPost(page,size);
     }
     @DeleteMapping
     public String deleteUserPost(@RequestParam Long  id){

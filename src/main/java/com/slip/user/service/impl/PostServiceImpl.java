@@ -5,6 +5,9 @@ import com.slip.user.dto.Post.PostAction;
 import com.slip.user.repositories.PostRepository;
 import com.slip.user.service.PostService;
 import com.slip.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +38,8 @@ public class PostServiceImpl implements PostService {
         return postRepository.findById(id).orElseThrow();
     }
     @Override
-    public List<Post> getAllPost(){
-        return postRepository.findAll();
+    public Page<Post> getAllPost(int offset , int limit){
+        return postRepository.findAll( PageRequest.of(offset,limit));
     }
     @Override
     public String deletePost(Long id){

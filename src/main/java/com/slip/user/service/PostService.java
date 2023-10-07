@@ -2,6 +2,8 @@ package com.slip.user.service;
 
 import com.slip.user.Models.Post;
 import com.slip.user.dto.Post.PostAction;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -10,7 +12,7 @@ public interface PostService{
 
     Post getPost(Long id);
 
-    List<Post> getAllPost();
+    Page<Post> getAllPost(int offset , int limit);
 
     String  deletePost(Long id);
 

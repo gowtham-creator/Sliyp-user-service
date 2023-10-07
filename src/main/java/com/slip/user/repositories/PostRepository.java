@@ -2,10 +2,13 @@ package com.slip.user.repositories;
 
 import com.slip.user.Models.Post;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.awt.print.Pageable;
 
 @Repository
 public interface PostRepository extends Neo4jRepository<Post,Long> {
