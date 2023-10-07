@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
 @Node
@@ -18,6 +19,7 @@ public class Tasks {
     @GeneratedValue
     private Long id;
     private String ref;
+    @NotEmpty
     private String description;
     private String userRef;
     private Instant createdAt;
