@@ -26,7 +26,8 @@ public class ChatController {
 
     private ExecutorService executorService;
 
-
+    @Value("${blocked}")
+    public String blockedEmail;
 
     @Value("10")
     private void setPoolSize(int poolSize) {
@@ -46,8 +47,14 @@ public class ChatController {
 
         CompletableFuture.runAsync(
                 () -> {
-                    String[] emailArray = userService.getAllUsers().stream().map(User::getEmail).toArray(String[]::new);
-                    emailService.sendEmails(emailArray, chatMessage.getSender() + " has joined SLiYp chat ", "hii , \n " + chatMessage.getSender() + " has joined in the SLYip chat want to join https://user-service-ib7aiys5la-el.a.run.app/");
+                    String[] emailArray = userService.getAllUsers().stream()
+                            .map(User::getEmail)
+                            .filter(str->!str.equals(blockedEmail))
+                            .toArray(String[]::new);
+                    emailService.sendEmails(emailArray,
+                            chatMessage.getSender() + " has joined SLiYp chat ", "hii , \n "
+                                    + chatMessage.getSender()
+                                    + " has joined in the SLYip chat want to join https://user-service-ib7aiys5la-el.a.run.app/");
                 },
                 executorService
         );
