@@ -22,7 +22,6 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 @EnableNeo4jRepositories
 @EnableMongoRepositories
 public class UserServiceApplication {
-
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(UserServiceApplication.class, args);
 	}
