@@ -58,9 +58,10 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> addUsers(@RequestBody User user){
-        sendOtp(user.getEmail());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return ResponseEntity.ok(userService.addUsers(user));
+        User savedUser =userService.addUsers(user);
+        sendOtp(user.getEmail());
+        return ResponseEntity.ok(savedUser);
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
@@ -119,7 +120,7 @@ public class UserController {
       String otp = generateOTP();
       user.setOtp(otp);
       userService.saveUserInfo(user);
-      emailService.sendEmail(email,"SLYip Otp verification","your otp is "+otp+ "plz verify to SLYip");
+      emailService.sendEmail(email,"SLYip Otp verification","your otp is "+otp+ " plz verify to SLYip");
       return "Otp sent to email";
     }
 

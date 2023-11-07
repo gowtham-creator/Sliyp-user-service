@@ -76,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .permitAll()
                 .antMatchers("/api/v1/user/login**",
+                        "/api/v1/user/register**",
                 "**/v3/api-docs/swagger-config**",
                         "**/v3/api-docs/**",
                         "/v3/api-docs/swagger-config",

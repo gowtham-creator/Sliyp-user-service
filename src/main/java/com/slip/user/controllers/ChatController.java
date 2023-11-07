@@ -54,7 +54,7 @@ public class ChatController {
                     emailService.sendEmails(emailArray,
                             chatMessage.getSender() + " has joined SLiYp chat ", "hii , \n "
                                     + chatMessage.getSender()
-                                    + " has joined in the SLYip chat want to join https://user-service-ib7aiys5la-el.a.run.app/");
+                                    + " has joined in the SLYip chat want to join  https://user-service-vsp55ymczq-el.a.run.app/");
                 },
                 executorService
         );

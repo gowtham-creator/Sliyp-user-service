@@ -1,4 +1,4 @@
-service swagger url : https://user-service-ib7aiys5la-el.a.run.app/swagger-ui/index.html#/post-controller/createUserPost
+service swagger url :  https://user-service-vsp55ymczq-el.a.run.app/swagger-ui/index.html#/post-controller/createUserPost
 
 
 # Local url of swagger
