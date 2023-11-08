@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 import static com.slip.user.constants.GeneralConstants.EMPTY_STRING;
 
@@ -33,10 +34,11 @@ public class ImageServiceImpl extends ImageService {
     @Override
     public String uploadImage(MultipartFile image, ImageType imageType, String postRef) {
         try {
+            String imgUrl="";
             if (ImageType.USER_PROFILE.equals(imageType)) {
 
                 User user = userService.getUserByEmail(AppUtils.getUserEmail());
-                final  String imgUrl=googleCloudStorageService.uploadImage(image.getBytes(),
+                 imgUrl=googleCloudStorageService.uploadImage(image.getBytes(),
                         String.join(EMPTY_STRING, user.getRef().toString(), imageType.name()),
                         "image/png");
                 user.setProfileImgUrl(imgUrl);
@@ -45,13 +47,17 @@ public class ImageServiceImpl extends ImageService {
             } else if (ImageType.USER_POST.equals(imageType)) {
                 Post post = postRepository.findById(Long.valueOf(postRef)).orElseThrow();
 
-                final  String imgUrl =googleCloudStorageService.uploadImage(image.getBytes(),
+                 imgUrl =googleCloudStorageService.uploadImage(image.getBytes(),
                                 String.join(EMPTY_STRING, post.getPostRef(), imageType.name()),
                                 "image/png");
                 post.setImageUrl(imgUrl);
                 postRepository.save(post);
+            }else if(ImageType.OTHER.equals(imageType)){
+                imgUrl =googleCloudStorageService.uploadImage(image.getBytes(),
+                        String.join(EMPTY_STRING, UUID.randomUUID().toString(), imageType.name()),
+                        "image/png");
             }
-            return "image uploaded successfully";
+            return imgUrl;
         }catch (Exception ex){ throw new RuntimeException("Please upload a different file");}
 
     }

@@ -62,8 +62,8 @@ public interface PostRepository extends Neo4jRepository<Post,Long> {
     @Query("MATCH (post:Post)<-[r:HAS_POSTED]-(user:User)\n" +
             "RETURN \n" +
             "  apoc.map.fromLists(\n" +
-            "    ['postRef','imageUrl','writeUp', 'AuthorEmail', 'AuthorProfileImgId', 'AuthorName', 'AuthorHandle'],\n" +
-            "    [post.postRef,post.imageUrl,post.writeUp, user.email, user.profileImgId, user.name, user.handle]\n" +
+            "    ['postRef','imageUrl','writeUp', 'AuthorEmail', 'AuthorProfileImgUrl', 'AuthorName', 'AuthorHandle'],\n" +
+            "    [post.postRef,post.imageUrl,post.writeUp, user.email, user.profileImgUrl, user.name, user.handle]\n" +
             "  ) AS postDetails SKIP $offset LIMIT  $limit \n")
     List<Map<String, Object>> getPosts(@Param("offset") int offset , @Param("limit") int limit);
 }
