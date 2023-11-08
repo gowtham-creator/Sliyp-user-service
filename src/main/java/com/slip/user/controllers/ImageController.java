@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/image")
 public class ImageController {
     public final ImageService imageService;
-    public ImageController(ImageService imageService, GoogleCloudStorageService googleCloudStorageService, GoogleCloudStorageService googleCloudStorageService1) {
+    public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
 
