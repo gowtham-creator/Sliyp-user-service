@@ -44,12 +44,11 @@ public class ImageServiceImpl extends ImageService {
 
             } else if (ImageType.USER_POST.equals(imageType)) {
                 Post post = postRepository.findById(Long.valueOf(postRef)).orElseThrow();
-                List<String> postImgIds = post.getPostImgUrls();
-                postImgIds.add(
-                        googleCloudStorageService.uploadImage(image.getBytes(),
+
+                final  String imgUrl =googleCloudStorageService.uploadImage(image.getBytes(),
                                 String.join(EMPTY_STRING, post.getPostRef(), imageType.name()),
-                                "image/png"));
-                post.setPostImgUrls(postImgIds);
+                                "image/png");
+                post.setImageUrl(imgUrl);
                 postRepository.save(post);
             }
             return "image uploaded successfully";
