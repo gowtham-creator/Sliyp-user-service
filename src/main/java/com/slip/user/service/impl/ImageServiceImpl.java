@@ -9,9 +9,11 @@ import com.slip.user.service.GoogleCloudStorageService;
 import com.slip.user.service.ImageService;
 import com.slip.user.service.UserService;
 import com.slip.user.util.AppUtils;
+import io.swagger.v3.oas.models.media.Content;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
 
 import static com.slip.user.constants.GeneralConstants.EMPTY_STRING;
@@ -34,11 +36,10 @@ public class ImageServiceImpl extends ImageService {
             if (ImageType.USER_PROFILE.equals(imageType)) {
 
                 User user = userService.getUserByEmail(AppUtils.getUserEmail());
-                user.setProfileImgUrl(
-                        googleCloudStorageService.uploadImage(image.getBytes(),
-                                String.join(EMPTY_STRING, user.getRef().toString(), imageType.name()),
-                                image.getContentType())
-                );
+                final  String imgUrl=googleCloudStorageService.uploadImage(image.getBytes(),
+                        String.join(EMPTY_STRING, user.getRef().toString(), imageType.name()),
+                        "image/png");
+                user.setProfileImgUrl(imgUrl);
                 userService.saveUserInfo(user);
 
             } else if (ImageType.USER_POST.equals(imageType)) {
@@ -47,7 +48,7 @@ public class ImageServiceImpl extends ImageService {
                 postImgIds.add(
                         googleCloudStorageService.uploadImage(image.getBytes(),
                                 String.join(EMPTY_STRING, post.getPostRef(), imageType.name()),
-                                image.getContentType()));
+                                "image/png"));
                 post.setPostImgUrls(postImgIds);
                 postRepository.save(post);
             }

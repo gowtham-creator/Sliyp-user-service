@@ -7,6 +7,7 @@ import com.slip.user.service.ImageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 
 
 @RestController
@@ -19,7 +20,7 @@ public class ImageController {
     }
 
     @PostMapping()
-       public String uploadUserImage(@RequestParam("file")  MultipartFile image,
+       public String uploadUserImage(@RequestParam("file") MultipartFile image,
                                    @RequestParam(value = "img-type",required = false) ImageType imageType,
                                    @RequestParam(value = "post-ref",required = false) String postRef) {
              return imageService.uploadImage( image, imageType, postRef);
